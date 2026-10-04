@@ -1,17 +1,26 @@
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
+
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
 }
 
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Run 'flutter pub get' before building.")
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
+
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
@@ -22,6 +31,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.example.meal_tracker"
+
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
@@ -40,8 +50,10 @@ android {
 
     defaultConfig {
         applicationId "com.example.meal_tracker"
+
         minSdkVersion 21
         targetSdkVersion 34
+
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -57,4 +69,5 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+}
